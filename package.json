@@ -1,0 +1,21 @@
+{
+  "name": "js_cafe_audry_study",
+  "version": "1.0.0",
+  "description": "js_cafe_audry_study",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wonjieun/js_cafe_audry_study.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wonjieun/js_cafe_audry_study/issues"
+  },
+  "homepage": "https://github.com/wonjieun/js_cafe_audry_study#readme"
+}

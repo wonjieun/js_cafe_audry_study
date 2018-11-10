@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ecmascript6 welcome to start</title>
+</head>
+
+<body>
+
+    <h1>복불복</h1>
+    <form action="">
+        <label for="">이름</label>
+        <input id="viewName" type="text">
+        <button onclick="Index.btnCreate(event);">생성</button>
+        <button onclick="Index.btnTotalClear(event);">전체삭제</button>
+        <button onclick="Index.btnStart(event);">복불복</button>
+    </form>
+    <hr>
+    <div class="content">
+        <table id="historyList">
+            <colgroup>
+                <col width=400 />
+                <col width=400 />
+                <col width=200 />
+            </colgroup>
+            <thead>
+                <th>순번</th>
+                <th>이름</th>
+                <th>CRUD</th>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script src="index.js"></script>
+    <script>
+        window.onload = () => {
+            Index.init();
+        }
+
+        let names = [];
+
+        let Index = {
+            init: () => {
+                console.log("Index start");
+            },
+            btnCreate: (e) => {
+                e.preventDefault();
+                console.log("btn start called");
+                Index.models.name = document.getElementById("viewName").value;
+                Index.models.id = Index.uuid();
+                // let filterNames = names.filter(i => {
+                //     let model = Index.setJsonDataToString(i);
+                //     return model.name != Index.models.name;
+                // });
+                names.push(Index.setJsonDataToString(Index.models));
+                // 숙제: Set처리하는 방법 알아보기
+                // let setNames = new Set(names);
+                // names = Array.from(setNames);
+                // console.log(">>>>>" + Index.filterNames(names, Index.models.name));
+                // names = [];
+                let newNames = Index.filterNames(names, Index.models.name);
+                delete names;
+                names = newNames;
+                // 숙제: 아래와 같이 구현 할수 있도록 연구해보기
+                // let names2 = name.distinct.list();
+                console.log(">>>>>>>>" + newNames);
+                console.log(">>>>>>>>" + names);
+                Index.draw();
+            },
+            filterNames: (names, inputName) => {
+                // 숙제: filter, map으로 처리하는 방법 알아보기
+                // let resultFilterNames = names.map(i => {
+                //     let model = Index.setJsonDataToString(i);
+                //     if (model.name == inputName) {
+                //         continue;
+                //     }
+                // })
+                let resultFilterNames = [];
+                let doubleCount = 0;
+                for (name of names) {
+                    let model = Index.setStringToJsonData(name);
+                    if (model.name == inputName) {
+                        doubleCount++;
+                    }
+                    if (doubleCount > 1) {
+                        continue;
+                    }
+                    let newModel = {
+                        id: model.id,
+                        name: model.name
+                    }
+                    resultFilterNames.push(Index.setJsonDataToString(newModel));
+                }
+                return resultFilterNames;
+            },
+            btnTotalClear: (e) => {
+                e.preventDefault();
+                console.log("전체삭제");
+                names = [];
+                Index.draw();
+            },
+            btnStart: (e) => {
+                console.log("복불복 시작");
+            },
+            setJsonDataToString: data => JSON.stringify(data),
+            setStringToJsonData: data => JSON.parse(data),
+            uuid: () => {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+                }
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+            },
+            btnRowRemove: (e) => {
+                consloe.log("한행 삭제");
+            },
+            btnRowEdit: (e) => {
+                console.log("한행 수정");
+            },
+            draw: () => {
+                console.log("draw");
+                console.log(Index.models);
+                console.log(names);
+                let tbodyHtml = "";
+                names.map(i => {
+                    let model = Index.setStringToJsonData(i);
+                    tbodyHtml += `
+                    <tr>
+                        <td>${model.id}</td>
+                        <td>${model.name}</td>
+                        <td>
+                            <button onclick="Index.btnRowRemove();">삭제</button>
+                            <button onclick="Index.btnRowEdit();">수정</button>
+                        </td>
+                    </tr>
+                `;
+                });
+                // let tbodyHtml = `
+                //     <tr>
+                //         <td>${Index.models.id}</td>
+                //         <td>${Index.models.name}</td>
+                //     </tr>
+                // `;
+                document.querySelector("#historyList > tbody").innerHTML = tbodyHtml;
+            },
+            event: () => {
+                console.log("draw");
+            },
+            models: {
+                id: "",
+                name: ""
+            }
+        }
+    </script>
+
+</body>
+
+</html>
