@@ -11,11 +11,13 @@
 <body>
     <h1>복불복</h1>
     <form action="">
-    <label for="">이름</label>
-    <input id="viewName" type="text">
-        <button onclick="Index.btnCreate(event);">생성</button>
-        <button onclick="Index.btnTotalClear(event);">전체삭제</button>
-        <button onclick="Index.btnStart(event);">복불복</button>
+        <label for="">이름</label>
+        <input id="viewName" type="text">
+        <div>
+            <button onclick="Index.btnCreate(event);">생성</button>
+            <button onclick="Index.btnTotalClear(event);">전체삭제</button>
+            <button onclick="Index.btnStart(event);">복불복</button>
+        </div>
     </form>
     <hr>
     <div class="content">
@@ -65,6 +67,7 @@
                 names = newNames;
                 // 숙제: 아래와 같이 구현 할수 있도록 연구해보기
                 // let names2 = name.distinct.list();
+                document.getElementById('viewName').value = "";
                 Index.draw();
             },
             filterNames: (names, inputName) => {
@@ -112,17 +115,56 @@
                 }
                 return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
             },
-            btnRowRemove: (modelId) => {
+            btnRowRemove: (modelId, e) => {
+                e.preventDefault();
                 names.map((name, i) => {
                     let model = Index.setStringToJsonData(name);
-                    if (model.id === modelId) {
+                    if (model.id == modelId) {
                         names.splice(i, 1);
                     }
                 });
                 Index.draw();
             },
-            btnRowEdit: (e) => {
-                console.log("한행 수정");
+            btnRowEdit: (modelName, e) => {
+                e.preventDefault();
+                let viewName = document.getElementById('viewName');
+                viewName.value = modelName;
+                viewName.focus();
+                let buttonHtml = `
+                    <button onclick="Index.btnRowEditComplete('${modelName}',event)">완료</button>
+                    <button onclick="Index.drawResetButton()">취소</button>
+                `;
+                document.querySelector("form > div").innerHTML = buttonHtml;
+            },
+            btnRowEditComplete: (modelName, e) => {
+                e.preventDefault();
+                let viewName = document.getElementById('viewName');
+                names.map((name, i) => {
+                    let model = Index.setStringToJsonData(name);
+                    console.log(model);
+                    if (model.name == modelName) {
+                        model.name = viewName.value;
+                        name = Index.setJsonDataToString(model);
+                        names.splice(i, 1, name);
+                    }
+                });
+                viewName.value = "";
+                Index.draw();
+                Index.drawResetButton();
+            },
+            /**
+             * TODO:
+             *  생성, 전체삭제, 복불복 toggle 처리
+             * */
+            drawResetButton: () => {
+                let buttonHtml = `
+                    <button onclick="Index.btnCreate(event);">생성</button>
+                    <button onclick="Index.btnTotalClear(event);">전체삭제</button>
+                    <button onclick="Index.btnStart(event);">복불복</button>
+                `;
+                document.querySelector("form > div").innerHTML = buttonHtml;
+                document.getElementById('viewName').value = "";
+                Index.draw();
             },
             draw: () => {
                 let tbodyHtml = "";
@@ -133,8 +175,8 @@
                         <td>${model.id}</td>
                         <td>${model.name}</td>
                         <td>
-                            <button onclick="Index.btnRowRemove('${model.id}');">삭제</button>
-                            <button onclick="Index.btnRowEdit();">수정</button>
+                            <button onclick="Index.btnRowRemove('${model.id}',event);">삭제</button>
+                            <button onclick="Index.btnRowEdit('${model.name}',event);">수정</button>
                         </td>
                     </tr>
                 `;
