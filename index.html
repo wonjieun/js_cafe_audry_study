@@ -9,11 +9,10 @@
 </head>
 
 <body>
-
     <h1>복불복</h1>
     <form action="">
-        <label for="">이름</label>
-        <input id="viewName" type="text">
+    <label for="">이름</label>
+    <input id="viewName" type="text">
         <button onclick="Index.btnCreate(event);">생성</button>
         <button onclick="Index.btnTotalClear(event);">전체삭제</button>
         <button onclick="Index.btnStart(event);">복불복</button>
@@ -22,9 +21,9 @@
     <div class="content">
         <table id="historyList">
             <colgroup>
-                <col width=400 />
-                <col width=400 />
-                <col width=200 />
+                <col width="400" />
+                <col width="400" />
+                <col width="200" />
             </colgroup>
             <thead>
                 <th>순번</th>
@@ -62,12 +61,10 @@
                 // console.log(">>>>>" + Index.filterNames(names, Index.models.name));
                 // names = [];
                 let newNames = Index.filterNames(names, Index.models.name);
-                delete names;
+                delete names;   // 배열 내용 삭제
                 names = newNames;
                 // 숙제: 아래와 같이 구현 할수 있도록 연구해보기
                 // let names2 = name.distinct.list();
-                console.log(">>>>>>>>" + newNames);
-                console.log(">>>>>>>>" + names);
                 Index.draw();
             },
             filterNames: (names, inputName) => {
@@ -98,11 +95,11 @@
             },
             btnTotalClear: (e) => {
                 e.preventDefault();
-                console.log("전체삭제");
                 names = [];
                 Index.draw();
             },
             btnStart: (e) => {
+                e.preventDefault();
                 console.log("복불복 시작");
             },
             setJsonDataToString: data => JSON.stringify(data),
@@ -115,16 +112,19 @@
                 }
                 return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
             },
-            btnRowRemove: (e) => {
-                consloe.log("한행 삭제");
+            btnRowRemove: (modelId) => {
+                names.map((name, i) => {
+                    let model = Index.setStringToJsonData(name);
+                    if (model.id === modelId) {
+                        names.splice(i, 1);
+                    }
+                });
+                Index.draw();
             },
             btnRowEdit: (e) => {
                 console.log("한행 수정");
             },
             draw: () => {
-                console.log("draw");
-                console.log(Index.models);
-                console.log(names);
                 let tbodyHtml = "";
                 names.map(i => {
                     let model = Index.setStringToJsonData(i);
@@ -133,7 +133,7 @@
                         <td>${model.id}</td>
                         <td>${model.name}</td>
                         <td>
-                            <button onclick="Index.btnRowRemove();">삭제</button>
+                            <button onclick="Index.btnRowRemove('${model.id}');">삭제</button>
                             <button onclick="Index.btnRowEdit();">수정</button>
                         </td>
                     </tr>
