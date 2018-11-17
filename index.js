@@ -204,36 +204,62 @@ let Index = {
         // console.log(sortNames);
         // console.log(typeof sortNames);      Object
         // console.log(typeof sortNames.name); string
-        if(sort === "ascend") {
-            console.log("sort ascending");
-            // delete names; -> 안됌? 왜
-            names = [];
-            sortNames.sort(function(a, b) {
-                console.log(typeof a.name);
-                let nameA = a.name.toUpperCase();
-                let nameB = b.name.toUpperCase();
+        sortNames.sort(function(a, b) {
+            let nameA = a.name.toUpperCase();
+            let nameB = b.name.toUpperCase();
+
+            if(sort === "ascend") {
+                // console.log("sort ascending");
                 return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-            });
-            sortNames.map((name, i) => {
-                names.push(Index.setJsonDataToString(name));
-            });
-            Index.draw();
+            } else {
+                // console.log("sort descending");
+                return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+            }
+        });
+
+        if(sort === "ascend") {
             sort = "descend";
         } else {
-            console.log("sort descending");
-            names = [];
-            sortNames.sort(function(a, b) {
-                console.log(typeof a.name);
-                let nameA = a.name.toUpperCase();
-                let nameB = b.name.toUpperCase();
-                return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
-            });
-            sortNames.map((name, i) => {
-                names.push(Index.setJsonDataToString(name));
-            });
-            Index.draw();
             sort = "ascend";
         }
+
+        names = [];
+        sortNames.map((name, i) => {
+            names.push(Index.setJsonDataToString(name));
+        });
+        Index.draw();
+        
+
+        // if(sort === "ascend") {
+        //     console.log("sort ascending");
+        //     // delete names; -> 안됌? 왜
+        //     names = [];
+        //     sortNames.sort(function(a, b) {
+        //         console.log(typeof a.name);
+        //         let nameA = a.name.toUpperCase();
+        //         let nameB = b.name.toUpperCase();
+        //         return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+        //     });
+        //     sortNames.map((name, i) => {
+        //         names.push(Index.setJsonDataToString(name));
+        //     });
+        //     Index.draw();
+        //     sort = "descend";
+        // } else {
+        //     console.log("sort descending");
+        //     names = [];
+        //     sortNames.sort(function(a, b) {
+        //         console.log(typeof a.name);
+        //         let nameA = a.name.toUpperCase();
+        //         let nameB = b.name.toUpperCase();
+        //         return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+        //     });
+        //     sortNames.map((name, i) => {
+        //         names.push(Index.setJsonDataToString(name));
+        //     });
+        //     Index.draw();
+        //     sort = "ascend";
+        // }
     },
     draw: () => {
         let tbodyHtml = "";
