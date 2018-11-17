@@ -1,5 +1,7 @@
 let names = [];
 
+let sort = "ascend";
+
 let Index = {
     init: () => {
         console.log("Index start");
@@ -102,12 +104,14 @@ let Index = {
             randomIndex; // ...?
 
         // While there remain elements to shuffle...
+        // shuffle할 elements가 남아있는 동안
         while (0 !== currentIndex) {
             // Pick a remaining element...
             randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex -= 1;
 
             // And swap it with the current element.
+            // 현재 element와 바꾸기
             temporaryValue = array[currentIndex];
             array[currentIndex] = array[randomIndex];
             array[randomIndex] = temporaryValue;
@@ -177,9 +181,63 @@ let Index = {
         document.getElementById("viewName").value = "";
         Index.draw();
     },
+    /*---------------------------------------------------
+    Array.prototype.sort()
+    : 배열의 요소를 정렬하여 그 배열을 반환
+    기본 정렬 순서는 문자열의 유니코드 코드 포인트를 따름.
+    
+    arr.sort([compareFunction])
+
+    compareFunction(a, b) < 0 (return val = -1)
+        - 정렬순서: a b
+    compareFunction(a, b) = 0
+        - 정렬순서: 변경 X
+    compareFunction(a, b) > 0 (return val = 1)
+        - 정렬순서: b a
+    -----------------------------------------------------*/
+    sortingName: () => {
+        let sortNames = [];
+        names.map((name) => {
+            let model = Index.setStringToJsonData(name);
+            sortNames.push(model);
+        });
+        // console.log(sortNames);
+        // console.log(typeof sortNames);      Object
+        // console.log(typeof sortNames.name); string
+        if(sort === "ascend") {
+            console.log("sort ascending");
+            // delete names; -> 안됌? 왜
+            names = [];
+            sortNames.sort(function(a, b) {
+                console.log(typeof a.name);
+                let nameA = a.name.toUpperCase();
+                let nameB = b.name.toUpperCase();
+                return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+            });
+            sortNames.map((name, i) => {
+                names.push(Index.setJsonDataToString(name));
+            });
+            Index.draw();
+            sort = "descend";
+        } else {
+            console.log("sort descending");
+            names = [];
+            sortNames.sort(function(a, b) {
+                console.log(typeof a.name);
+                let nameA = a.name.toUpperCase();
+                let nameB = b.name.toUpperCase();
+                return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+            });
+            sortNames.map((name, i) => {
+                names.push(Index.setJsonDataToString(name));
+            });
+            Index.draw();
+            sort = "ascend";
+        }
+    },
     draw: () => {
         let tbodyHtml = "";
-        names.map((name, i) => {
+        names.map((name) => {
             let model = Index.setStringToJsonData(name);
             tbodyHtml += `
             <tr>
