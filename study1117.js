@@ -179,18 +179,23 @@ for(let value of doubleGen) {
     console.log(value);
 }
 
-console.log("=========================================");
+console.log("==========================================================================");
+console.log("\t\t\t\t로또");
+console.log("==========================================================================");
 
-function numRandom() {
+let uncheckedAllTurns = [];
+//let tempTurns = [];
+let turns = [];
+
+function setNumRandom() {
     let lottoNum = [];
     for(let i=0; i<7; i++) {
-        lottoNum[i] = Math.floor(Math.random()*38);
+        lottoNum[i] = Math.floor(Math.random()*38+1);
     }
-    console.log(lottoNum);
     return lottoNum;
 }
 
-function setModule(lottoNumber) {
+function checkNum(lottoNumber) {
     let lottoCheck = new Set(lottoNumber);
     let arrayLotto = [];
     lottoCheck.forEach(function(value, key) {
@@ -199,11 +204,18 @@ function setModule(lottoNumber) {
     return arrayLotto;
 }
 
-function setTurn(checkNum) {
-    checkNum.sort();
-    console.log(JSON.stringify(checkNum));
-    turns.push(checkNum)
-    console.log(turns);
+function checkTurns(allTurns) {
+    let lottoTurnCheck = new Set(allTurns);
+    lottoTurnCheck.forEach(function(value, key) {
+        turns.push(value);
+    });
+}
+
+function setTurn(checkedNum) {
+    checkedNum.sort(function(a, b) {
+        return a-b;
+    });
+    uncheckedAllTurns.push(JSON.stringify(checkedNum));
 }
 
 function* lottoGen(turns) {
@@ -212,36 +224,43 @@ function* lottoGen(turns) {
     }
 }
 
-let turns = [];
-
 // 1~9회차 로또
 // 1 ~ 38
 function lottoFactory() {
     for (let i=0; i<9; i++) {
         // 루프로 7자리를 채우기
-        let sevenNumber = numRandom();
+        let randomNum = setNumRandom();
         
-        // 각 자리 수 마다 중복체크
-        // set
-        let checkNumber = setModule(sevenNumber);
-        if(sevenNumber.length === checkNumber.length) {
-            setTurn(checkNumber);
-        } else {
-            console.log("번호중복");
+        // 각 자리 수 마다 중복체크 (SET)
+        let checkedNum = checkNum(randomNum);
+
+        if (randomNum.length === checkedNum.length) {
+            // 모든 회차 array 담기
+            setTurn(checkedNum);
         }
     }
-    // 각 회차 마다 중복체크
-    // set
+    // 각 회차 마다 정렬 중복체크 (SET)
+    checkTurns(uncheckedAllTurns);
+    console.log(turns);
+    //FIXME: turns가 9개로 채워질 때 까지 check해서 넣기
 
-    // 재귀함수 응용하면 Set 중복체크 관련 
-    // 결과 yield
+    //TODO: 재귀함수 응용하면 Set 중복체크 관련 처리 가능
 }
 lottoFactory();
 
+// 결과 yield
 let lotto = lottoGen(turns);
-// let lotto = lottoFactory();
-lotto.next();
-lotto.next();
-lotto.next();
-lotto.next();
-lotto.next();
+console.log(lotto.next());
+console.log(lotto.next());
+console.log(lotto.next());
+console.log(lotto.next());
+console.log(lotto.next());
+console.log(lotto.next());
+console.log(lotto.next());
+console.log(lotto.next());
+console.log(lotto.next());
+console.log(lotto.next());
+// lotto.next();
+// lotto.next();
+// lotto.next();
+// lotto.next();
