@@ -9,6 +9,7 @@ let stackPeak = 0;
 let Index = {
     init: () => {
         console.log("Index start");
+        Index.draw();
     },
     btnCreate: e => {
         e.preventDefault();
@@ -21,14 +22,15 @@ let Index = {
             // });
             names.push(Index.setJsonDataToString(Index.models));
             console.log("JSON Data To String: "+Index.setJsonDataToString(Index.models));
-
+            console.log(localStorage.index0);
+            console.log(typeof localStorage.index1);
+            console.log(typeof localStorage);
             // key 값에 '숫자'를 입력하면 원하는 값이 나오지 않음. (예. 0: "0")
             // myStorage.setItem(Index.models.id, Index.models.name);
             localStorage.setItem(`index${stackPeak}`, Index.setJsonDataToString(Index.models));
             stackPeak++;
             console.log(localStorage);
 
-            console.log(localStorage.index1);
             // 숙제: Set처리하는 방법 알아보기
             // let setNames = new Set(names);
             // names = Array.from(setNames);
@@ -84,6 +86,7 @@ let Index = {
     btnTotalClear: e => {
         e.preventDefault();
         names = [];
+        localStorage.clear();
         Index.draw();
     },
     btnStart: e => {
@@ -249,24 +252,44 @@ let Index = {
     },
     draw: () => {
         let tbodyHtml = "";
-        names.map((name) => {
-            let model = Index.setStringToJsonData(name);
-            tbodyHtml += `
+        for (let storage of localStorage) {
+            console.log(storage);
+        }
+        let data = Index.setStringToJsonData(localStorage.index1);
+        tbodyHtml += `
             <tr>
                 <td></td>
-                <td>${model.id}</td>
-                <td>${model.name}</td>
+                <td>${data.id}</td>
+                <td>${data.name}</td>
                 <td>
                     <button onclick="Index.btnRowRemove('${
-                model.id
+                data.id
                 }',event);">삭제</button>
                     <button onclick="Index.btnRowEdit('${
-                model.name
+                data.name
                 }',event);">수정</button>
                 </td>
             </tr>
         `;
-        });
+
+        // names.map((name) => {
+        //     let model = Index.setStringToJsonData(name);
+        //     tbodyHtml += `
+        //     <tr>
+        //         <td></td>
+        //         <td>${model.id}</td>
+        //         <td>${model.name}</td>
+        //         <td>
+        //             <button onclick="Index.btnRowRemove('${
+        //         model.id
+        //         }',event);">삭제</button>
+        //             <button onclick="Index.btnRowEdit('${
+        //         model.name
+        //         }',event);">수정</button>
+        //         </td>
+        //     </tr>
+        // `;
+        // });
         // let tbodyHtml = `
         //     <tr>
         //         <td>${Index.models.id}</td>
