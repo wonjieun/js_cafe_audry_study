@@ -2,7 +2,7 @@ let names = [];
 
 let sort = "ascend";
 
-let myStorage = localStorage;
+// let myStorage = localStorage;
 
 let stackPeak = 0;
 
@@ -24,11 +24,11 @@ let Index = {
 
             // key 값에 '숫자'를 입력하면 원하는 값이 나오지 않음. (예. 0: "0")
             // myStorage.setItem(Index.models.id, Index.models.name);
-            myStorage.setItem(`index${stackPeak}`, Index.setJsonDataToString(Index.models));
+            localStorage.setItem(`index${stackPeak}`, Index.setJsonDataToString(Index.models));
             stackPeak++;
-            console.log(myStorage);
+            console.log(localStorage);
 
-            console.log(myStorage.index1);
+            console.log(localStorage.index1);
             // 숙제: Set처리하는 방법 알아보기
             // let setNames = new Set(names);
             // names = Array.from(setNames);
