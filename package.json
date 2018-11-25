@@ -17,5 +17,6 @@
   "bugs": {
     "url": "https://github.com/wonjieun/js_cafe_audry_study/issues"
   },
-  "homepage": "https://github.com/wonjieun/js_cafe_audry_study#readme"
+  "homepage": "https://github.com/wonjieun/js_cafe_audry_study#readme",
+  "dependencies": {}
 }

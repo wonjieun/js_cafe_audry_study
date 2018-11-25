@@ -67,7 +67,7 @@ let Index = {
         // })
         let resultFilterNames = [];
         let doubleCount = 0;
-        for (name of names) {
+        for (let name of names) {
             let model = Index.setStringToJsonData(name);
             if (model.name == inputName) {
                 doubleCount++;
@@ -252,50 +252,21 @@ let Index = {
     },
     draw: () => {
         let tbodyHtml = "";
-        for (let storage of localStorage) {
-            console.log(storage);
+        for (let i=0; i<localStorage.length; i++) {
+            console.log("localStorage: " + localStorage.getItem(`index${i}`));
+            let data = Index.setStringToJsonData(localStorage.getItem(`index${i}`));
+            tbodyHtml += `
+                <tr>
+                    <td></td>
+                    <td>${data.id}</td>
+                    <td>${data.name}</td>
+                    <td>
+                        <button onclick="Index.btnRowRemove('${data.id}',event);">삭제</button>
+                        <button onclick="Index.btnRowEdit('${data.name}',event);">수정</button>
+                    </td>
+                </tr>
+            `;
         }
-        let data = Index.setStringToJsonData(localStorage.index1);
-        tbodyHtml += `
-            <tr>
-                <td></td>
-                <td>${data.id}</td>
-                <td>${data.name}</td>
-                <td>
-                    <button onclick="Index.btnRowRemove('${
-                data.id
-                }',event);">삭제</button>
-                    <button onclick="Index.btnRowEdit('${
-                data.name
-                }',event);">수정</button>
-                </td>
-            </tr>
-        `;
-
-        // names.map((name) => {
-        //     let model = Index.setStringToJsonData(name);
-        //     tbodyHtml += `
-        //     <tr>
-        //         <td></td>
-        //         <td>${model.id}</td>
-        //         <td>${model.name}</td>
-        //         <td>
-        //             <button onclick="Index.btnRowRemove('${
-        //         model.id
-        //         }',event);">삭제</button>
-        //             <button onclick="Index.btnRowEdit('${
-        //         model.name
-        //         }',event);">수정</button>
-        //         </td>
-        //     </tr>
-        // `;
-        // });
-        // let tbodyHtml = `
-        //     <tr>
-        //         <td>${Index.models.id}</td>
-        //         <td>${Index.models.name}</td>
-        //     </tr>
-        // `;
         document.querySelector("#historyList > tbody").innerHTML = tbodyHtml;
     },
     event: () => {
