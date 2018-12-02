@@ -84,7 +84,7 @@ function sumLotto() {
   for (let oneLotto of sumLotto) {
     sum += oneLotto;
   }
-  console.log("sum >>> " + sum);
+  // console.log("sum >>> " + sum);
   return sum;
 }
 
@@ -92,7 +92,7 @@ function compareSum(args) {
   let sumArr = args.sort(function(a, b) {
     return b - a;
   });
-  console.log(sumArr);
+  // console.log(sumArr);
 }
 
 // TODO: 로또 숫자의 합이 가장 큰 순서대로 출력
@@ -118,7 +118,7 @@ let iterable = [promise1, promise2, promise3];
 Promise.all(iterable).then(
   function(value) {
     compareSum(value);
-    console.log("value >>> " + value);
+    // console.log("value >>> " + value);
   },
   function(reason) {
     console.log(reason);
@@ -141,20 +141,22 @@ let member = {
 // DB
 let members = [
   { user: "admin", pw: "1234" },
-  { user: "user01", pw: "1234" },
-  { user: "user02", pw: "1234" },
-  { user: "user03", pw: "1234" },
-  { user: "user04", pw: "1234" }
+  { user: "user01", pw: "1111" },
+  { user: "user02", pw: "2222" },
+  { user: "user03", pw: "3333" },
+  { user: "user04", pw: "4444" }
 ];
 
 // CRUD
 let getLogin = function(member) {
-  members.filter(m => m.user == member.user);
+  return members.filter(m => m.user == member.userId);
 };
 
+console.log(`getLogin >>> ${JSON.stringify(getLogin(member))}`);
+
 // admin / 1234
-// id, pw가 일치하면 함수를 호출
-// get -> if (getLogin(member)) true else false;
+// TODO: id, pw가 일치하면 calculation 함수를 호출
+// proxy get method -> if (getLogin(member)) true else false;
 let proxy = new Proxy(member, {
   set: function(target, prop, value, receiver) {
     console.log(target);
@@ -171,4 +173,4 @@ console.log(proxy.password);
 let bool = "userId" in proxy;
 console.log(bool);
 
-// member => proxy => state value static => call calc control
+// TODO: member => proxy => state value static => call calc control
