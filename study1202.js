@@ -1,6 +1,6 @@
-console.log("========================================================");
-console.log("\t\t\t로또");
-console.log("========================================================");
+console.log("===============================================");
+console.log("\t\t프로미스 로또");
+console.log("===============================================");
 
 let uncheckedAllTurns = [];
 //let tempTurns = [];
@@ -125,9 +125,9 @@ Promise.all(iterable).then(
   }
 );
 
-console.log("========================================================");
-console.log("\t\t\t로그인");
-console.log("========================================================");
+console.log("===============================================");
+console.log("\t\t프록시 로그인");
+console.log("===============================================");
 
 // Proxy를 이용해서 로그인 처리
 let member = {
@@ -137,40 +137,47 @@ let member = {
     return "yes";
   }
 };
-
 // DB
 let members = [
   { user: "admin", pw: "1234" },
+  { user: "admin", pw: "123" },
+  { user: "admi", pw: "1234" },
   { user: "user01", pw: "1111" },
   { user: "user02", pw: "2222" },
   { user: "user03", pw: "3333" },
   { user: "user04", pw: "4444" }
 ];
-
 // CRUD
 let getLogin = function(member) {
-  return members.filter(m => m.user == member.userId);
+  let checkMember = members.filter(m => m.user == member.userId);
+  return checkMember.filter(m => m.pw == member.password);
 };
-
-console.log(`getLogin >>> ${JSON.stringify(getLogin(member))}`);
 
 // admin / 1234
 // TODO: id, pw가 일치하면 calculation 함수를 호출
 // proxy get method -> if (getLogin(member)) true else false;
 let proxy = new Proxy(member, {
-  set: function(target, prop, value, receiver) {
-    console.log(target);
-    target[prop] = value;
-    return true;
+  // get 메소드는 . 연산을 후크하는 역할
+  // target은 member
+  get: function(target, prop, receiver) {
+    // let result = Reflect.get(member, prop);
+    // Reflect와 trap은 별개다
+    // target (member)의 "userId"를 getLogin 메소드에서
+    // members (DB) "user"와 비교하고 같으면 true, 다르면 false
+    let boolProxy = getLogin(target) !== [] ? true : false;
+    console.log(">>" + target);
+    console.log(getLogin(target));
+    // console.log("prop: " + prop + " target: " + JSON.stringify(target));
+    return getLogin(target);
+    // return boolProxy;
+    // return result;
+    // return getLogin(prop) ? true : false;
+    // 프로퍼티 이름이 객체에 없을 때, 기본값을 false로 리턴
+    // return prop in target ? target[prop] : false;
   }
 });
-
-proxy.userId = "admin";
-proxy.password = "1234";
-console.log(proxy.userId);
-console.log(proxy.password);
-
-let bool = "userId" in proxy;
-console.log(bool);
+console.log(proxy);
+// console.log("proxy.userId: " + JSON.stringify(proxy.userId));
+// console.log("proxy.password: " + JSON.stringify(proxy.password));
 
 // TODO: member => proxy => state value static => call calc control
