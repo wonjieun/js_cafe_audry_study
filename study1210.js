@@ -11,12 +11,13 @@ class Member {
 
 // 입력 값
 const admin = new Member("admin", "1234");
-// const guest = new Member("guest", "0000");
+// const admin = new Member("guest1", "0000");
 
 // DB
 let membersDB = [
   { userId: "admin", password: "1234" },
-  { userId: "guest", password: "0000" },
+  { userId: "guest1", password: "0000" },
+  { userId: "guest2", password: "1111" },
   { userId: "admi", password: "1234" },
   { userId: "user01", password: "1111" },
   { userId: "user02", password: "2222" },
@@ -53,14 +54,23 @@ class MemberDao {
       return filterMember[0].password;
     }
   }
-  addMember() {
-    console.log(this.authFlag);
+  addMember(memberId) {
+    membersDB.push({ userId: memberId, password: "0000" });
   }
-  delMember() {
-    console.log(this.authFlag);
+  delMember(member) {
+    console.log("delMember");
+    if (member.password === undefined) {
+      membersDB.map((val, index) => {
+        console.log(val);
+        if (val.userId === member.userId) {
+          console.log(index);
+          membersDB.splice(index, 1);
+        }
+      });
+    }
   }
-  editMember() {
-    console.log(this.authFlag);
+  editMember(member) {
+    console.log("edit");
   }
 }
 
@@ -71,23 +81,38 @@ const proxy = new Proxy(admin, {
   get: function(target, prop, receiver) {
     return memberDao.checkLogin(target);
   },
-  getPrototypeOf(target, prototype) {
-    // console.log(Reflect.getPrototypeOf(target, prototype));
-    console.log("트랩 호출");
-    // memberDao.checkLogin(target);
-    return Reflect.getPrototypeOf(target, prototype);
-  },
   has: function(target, prop) {
     let result = Reflect.has(target, prop);
     return result;
+  },
+  set: function(target, prop, value, receiver) {
+    console.log(`${prop}: ${value} 추가`);
+    memberDao.addMember(value);
+    console.log(membersDB[membersDB.length - 1]);
+  },
+  deleteProperty: function(target, prop) {
+    console.log(Reflect.deleteProperty(target, prop));
+    Reflect.deleteProperty(target, prop);
+    console.log(target);
+    memberDao.delMember(target);
+    console.log();
+    // console.log(membersDB[membersDB.length - 1]);
+    return true;
   }
 });
-console.log("proxy >>");
+console.log(proxy.userId);
 // console.log(proxy.userId);
+const newMember = "jieun";
 
 if (proxy.userId) {
   console.log(memberDao.checkID(admin));
-  console.log(memberDao.checkPassword(proxy.userId));
+  console.log(memberDao.checkPassword(admin.userId));
+  if (proxy.userId === "admin") {
+    proxy.userId = newMember;
+    console.log(proxy.userId);
+    let val = delete proxy.password;
+    console.log(val);
+  }
 } else {
   console.log("일치하는 정보가 없습니다.");
 }
@@ -104,3 +129,7 @@ if (proxy.userId) {
 
 // let proto = proxy.userId;
 // console.log(proto);
+
+membersDB.map((val, index) => {
+  console.log(val);
+});
