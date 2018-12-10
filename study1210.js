@@ -48,10 +48,8 @@ class MemberDao {
   }
   checkPassword(memberId) {
     if (proxy.password) {
-      console.log(this.proxy.userId);
-      console.log("아이디가 존재합니다.");
+      console.log("비밀번호는 아래와 같습니다.");
       const filterMember = membersDB.filter(m => m.userId == memberId);
-      console.log("member:" + memberId);
       return filterMember[0].password;
     }
   }
@@ -71,21 +69,12 @@ const memberDao = new MemberDao(admin);
 // proxy 처리
 const proxy = new Proxy(admin, {
   get: function(target, prop, receiver) {
-    // const member = Reflect.get(target, prop, receiver);
-    // console.log(member);
-
-    // return MemberDao.checkLogin(target);
-    // console.log(">>>>>>");
-    // console.log(MemberDao.checkLogin(target));
-    // console.log(">>>>>>");
-    // console.log(MemberDao.checkID(target));
-    // console.log(MemberDao.checkPassword(MemberDao.checkID(target)));
-    return Reflect.get(target, prop, receiver);
+    return memberDao.checkLogin(target);
   },
   getPrototypeOf(target, prototype) {
     // console.log(Reflect.getPrototypeOf(target, prototype));
     console.log("트랩 호출");
-    memberDao.checkLogin(target);
+    // memberDao.checkLogin(target);
     return Reflect.getPrototypeOf(target, prototype);
   },
   has: function(target, prop) {
@@ -94,7 +83,14 @@ const proxy = new Proxy(admin, {
   }
 });
 console.log("proxy >>");
-console.log(this.proxy.userId);
+// console.log(proxy.userId);
+
+if (proxy.userId) {
+  console.log(memberDao.checkID(admin));
+  console.log(memberDao.checkPassword(proxy.userId));
+} else {
+  console.log("일치하는 정보가 없습니다.");
+}
 
 // let bool = "userId" in this.proxy;
 // console.log(bool);
@@ -103,8 +99,8 @@ console.log(this.proxy.userId);
 //   console.log(">> " + key);
 // }
 // console.log("proxy: ", proxy);
-console.log(Reflect.setPrototypeOf(proxy, admin));
+// console.log(Reflect.setPrototypeOf(proxy, admin));
 // console.log(admin.userId);
 
-let proto = proxy.userId;
-console.log(proto);
+// let proto = proxy.userId;
+// console.log(proto);
