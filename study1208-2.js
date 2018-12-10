@@ -47,6 +47,7 @@ class MemberDao {
       m => m.userId == member.userId && m.password == member.password
     );
     console.log(filterMember);
+    // TODO: filterName이 존재하면 return true
     return filterMember;
   }
   checkID(id) {}
@@ -62,7 +63,7 @@ const proxy = new Proxy(admin, {
   get: function(target, prop, receiver) {
     // target으로 직접 접근 시, target의 객체 타입, 속성 타입 모두
     // 출력 되어 여러 번 호출. 원하는 결과를 도출할 수 없음
-
+    memberDao.checkLogin(Reflect.get(target, prop, receiver));
     return Reflect.get(target, prop, receiver);
   }
 });
