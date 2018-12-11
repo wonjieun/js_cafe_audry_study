@@ -9,7 +9,7 @@ class Member {
   }
 }
 
-// 입력 값
+// 회원 정보 입력 값
 const admin = new Member("admin", "1234");
 const guest = new Member("guest1", "0000");
 
@@ -117,36 +117,7 @@ proxy.userId = newMember;
 membersDB.map((val, index) => {
   console.log(val);
 });
-/* if (proxy.userId) {
-  console.log("------------------아이디 체크------------------");
-  console.log(memberDao.checkID(proxy));
-  console.log("-----------------비밀번호 체크-----------------");
-  console.log(memberDao.checkPassword(proxy.userId));
-
-  if (proxy.userId === "admin") {
-    console.log("------------------멤버 추가------------------");
-    proxy.userId = newMember;
-
-    membersDB.map((val, index) => {
-      console.log(val);
-    });
-
-    console.log("------------------멤버 삭제------------------");
-    let val = delete proxy.password;
-    console.log(val);
-
-    membersDB.map((val, index) => {
-      console.log(val);
-    });
-  }
-} else {
-  console.log("일치하는 정보가 없습니다.");
-}
- */
 
 // TODO: 파일 분리 member: model, memberDao: service, proxy 공통 처리 (commonjs): proxy, main: view
 // 빌드 하면 파일 하나로 번들링
 // html 간단하게
-
-// ES6
-// Promise, Proxy, Module
