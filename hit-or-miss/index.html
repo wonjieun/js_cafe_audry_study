@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link rel="shortcut icon" href="#" />
+	<title>ecmascript6 welcome to start</title>
+	<style>
+		table {
+			border: 1px solid seagreen;
+		}
+		table tr td,th {
+			border: 1px solid seagreen;
+		}
+		.btnArea {
+			display: inline;
+		}
+		.sortBtn {
+			border: none;
+			width: 100%;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>복불복</h1>
+	<form action="">
+		<label for="">이름</label> <input id="viewName" type="text" />
+		<div class="btnArea">
+			<button onclick="Index.btnCreate(event);">생성</button>
+			<button onclick="Index.btnTotalClear(event);">전체삭제</button>
+			<button onclick="Index.btnStart(event);">복불복</button>
+		</div>
+	</form>
+	<hr />
+	<div class="content">
+		<table id="historyList">
+			<colgroup>
+				<col width="100" />
+				<col width="400" />
+				<col width="400" />
+				<col width="200" />
+			</colgroup>
+			<thead>
+				<th>순위</th>
+				<th>순번</th>
+				<th><button class="sortBtn" onclick="Index.sortingName()">이름</button></th>
+				<th>CRUD</th>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+	<script src="index.js"></script>
+	<script>
+		window.onload = () => {
+			console.log("onload");
+			Index.init();
+		};
+	</script>
+</body>
+
+</html>
