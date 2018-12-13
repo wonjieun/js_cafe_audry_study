@@ -18,5 +18,7 @@
     "url": "https://github.com/wonjieun/js_cafe_audry_study/issues"
   },
   "homepage": "https://github.com/wonjieun/js_cafe_audry_study#readme",
-  "dependencies": {}
+  "dependencies": {
+    "http-server": "^0.11.1"
+  }
 }
